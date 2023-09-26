@@ -121,6 +121,10 @@ BootcampSchema.pre('save', function(next) {
 
 // Geocode & create location field
 BootcampSchema.pre('save', async function(next) {
+  //removes geocode
+  console.log('pre save')  
+  
+  /*
   const loc = await geocoder.geocode(this.address);
   this.location = {
     type: 'Point',
@@ -135,6 +139,8 @@ BootcampSchema.pre('save', async function(next) {
 
   // Do not save address in DB
   this.address = undefined;
+*/
+
   next();
 });
 
