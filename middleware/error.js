@@ -4,17 +4,32 @@ const errorHandler = (err, req, res, next) => {
 
     error.message = err.message
     //log to console for developer
-    console.log(err.stack)
+    console.log(err)
 
 
 
+    //Mongo cast error, resource not found
     if (err.name === 'CastError'){
         const message = `Resource cast error not found id value ${err.value}`
         error = new ErrorResponse(message, 404);
+    }
+
+
+    //Mongoose duplicated field value
+    if (err.code === 11000){
+        const message = `Duplicate field value entered`
+        error = new ErrorResponse(message, 400);
 
     }
 
+    //Mongoose validation error    
+    if (err.name === 'ValidationError'){
+        const message = Object.values(err.errors).map(val => val.message)        
+        error = new ErrorResponse(message, 400);
+    }
  
+
+    //writes the error message and status
     res.status(error.statusCode || 500).json({
         success: false,
         message: error.message || 'Server internal error'
