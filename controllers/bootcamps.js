@@ -16,7 +16,7 @@ exports.getBootcamps = async (req, res, next) => {
         let reqQuery = { ...req.query }
 
         //Fields to exclude
-        const removeFields = ['select', 'sort'];
+        const removeFields = ['select', 'sort', 'page', 'limit'];
 
 
         //Important: Loop over remove fields and delete from request query
@@ -49,13 +49,41 @@ exports.getBootcamps = async (req, res, next) => {
             query = query.sort('-averageCost'); //by default descendant averageCost (-)
         }
 
+        //Paginantion
+        const page = parseInt(req.query.page, 10) || 1;
+        const limit = parseInt(req.query.limit, 10) || 5;
+        const startIndex = (page - 1) * limit;
+        query.skip(startIndex).limit(limit);
+        const endIndex = page * limit;
+        const total = await Bootcamp.countDocuments();
+
+
         //execute query
         const bootcamp = await query
+
+        //pagination result
+        const pagination = {};
+
+        
+        if (endIndex < total){
+            pagination.next = {
+                page: page + 1,
+                limit
+            }
+        }
+
+        if (startIndex > 0){
+            pagination.prev = {
+                page: page - 1,
+                limit
+            }
+        }
+
 
         console.log('result'.red.bold, bootcamp)
 
 
-        res.status(200).json({success: true, count: bootcamp.length, data: bootcamp});
+        res.status(200).json({success: true, total: total, pagination, data: bootcamp});
     } catch(error){
         next(error)
     }    
