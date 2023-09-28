@@ -12,6 +12,7 @@ dotenv.config({ path: './config/config.env'});
 
 
 const bootcampsRouter = require('./routes/bootcamps')
+const coursesRouter = require('./routes/courses')
 
 
 //DB connection
@@ -34,6 +35,7 @@ if (process.env.NODE_ENV === 'development')
 
 //mount routers
 app.use('/api/v1/bootcamps', bootcampsRouter);
+app.use('/api/v1/courses', coursesRouter);
 
 
 //middleware
