@@ -9,7 +9,52 @@ const geocoder = require('../utils/geocoder');
 */
 exports.getBootcamps = async (req, res, next) => {
     try {
-        const bootcamp = await Bootcamp.find()
+        console.log(req.query)
+        let query;
+
+        //Copy query
+        let reqQuery = { ...req.query }
+
+        //Fields to exclude
+        const removeFields = ['select', 'sort'];
+
+
+        //Important: Loop over remove fields and delete from request query
+        removeFields.forEach(param => delete reqQuery[param]);
+
+        //create string query
+        let queryStr = JSON.stringify(reqQuery)
+
+        //Create operators $le, $gt...
+        queryStr = queryStr.replace(/\b(gt|gte|lt|lte|in)\b/g, match=>`$${match}`);
+
+        console.log(queryStr)
+
+        //Find resources
+        query = Bootcamp.find(JSON.parse(queryStr));
+
+        //Select fields if included
+        if (req.query.select){
+            const fields = req.query.select.split(',').join(' ')
+            console.log(fields)
+            query = query.select(fields)
+        }
+
+        //Sort fields if included
+        if (req.query.sort){
+            const sorts = req.query.select.split(',').join(' ')
+            console.log(sorts)
+            query = query.sort(sorts)
+        } else {
+            query = query.sort('-averageCost'); //by default descendant averageCost (-)
+        }
+
+        //execute query
+        const bootcamp = await query
+
+        console.log('result'.red.bold, bootcamp)
+
+
         res.status(200).json({success: true, count: bootcamp.length, data: bootcamp});
     } catch(error){
         next(error)
