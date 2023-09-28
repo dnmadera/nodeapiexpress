@@ -31,7 +31,7 @@ exports.getBootcamps = async (req, res, next) => {
         console.log(queryStr)
 
         //Find resources
-        query = Bootcamp.find(JSON.parse(queryStr));
+        query = Bootcamp.find(JSON.parse(queryStr)).populate('courses');
 
         //Select fields if included
         if (req.query.select){
@@ -129,15 +129,21 @@ exports.createBootcamp = asyncHandler (async (req, res, next) => {
  * @param   {string} req.params.id - the resource id
  * @returns {string} the message of the result of the operation 
 */
-exports.deleteBootcamp = async (req, res, next) => {
-    try {
-        const bootcamp = await Bootcamp.deleteOne({_id: req.params.id});
-        res.status(200).json({success: true, message: `deletes bootcamps id ${req.params.id} deletedCount: ${bootcamp.deletedCount}`});        
-    } catch (error) {
-        next(error)
+exports.deleteBootcamp = asyncHandler(async (req, res, next) => {
+    console.log('id', req.params.id)
+    const bc = await Bootcamp.findById(req.params.id);
+
+    console.log('bootcamp', bc)
+
+    if (!bc){
+        return next(new ErrorResponse(`Bootcamp not found with id of ${req.params.id}`), 404)
     }
+
+    await bc.deleteOne()
+
+    res.status(200).json({success: true, message: `deletes bootcamps id ${req.params.id}`});
     
-}
+});
 
 
 /**

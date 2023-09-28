@@ -15,10 +15,14 @@ exports.getCourses = async (req, res, next) => {
         let query;
 
 
+        const populate = {
+            path: "bootcamp",
+            select: "name description"
+        }
         if (req.params.bootcamp_id){
-            query = Course.find({ bootcamp: req.params.bootcamp_id })
+            query = Course.find({ bootcamp: req.params.bootcamp_id }).populate(populate);
         } else {
-            query = Course.find();
+            query = Course.find().populate(populate);
         }
 
         
