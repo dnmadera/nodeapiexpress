@@ -8,6 +8,7 @@ const {
     , createBootcamp
     , deleteBootcamp   
     , getBootcampRadius 
+    , photoUploadBootcamp
 } = require('../controllers/bootcamps');
 
 //include other route sources
@@ -19,12 +20,15 @@ const router = express.Router();
 router.use('/:bootcamp_id/courses', courseRouter)
 
 
-router.route('/')
-.get(getBootcamps)
-.post(createBootcamp);
 
 
 router.route('/radius/:zipcode/:distance').get(getBootcampRadius)
+
+router.route('/:id/photo').put(photoUploadBootcamp)
+
+router.route('/')
+.get(getBootcamps)
+.post(createBootcamp);
 
 
 router.route('/:id')
@@ -32,5 +36,8 @@ router.route('/:id')
 .delete(deleteBootcamp)
 .put(putBootcamp)
 .patch(patchBootcamp);
+
+
+
 
 module.exports = router
