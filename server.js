@@ -14,7 +14,7 @@ dotenv.config({ path: './config/config.env'});
 
 const bootcampsRouter = require('./routes/bootcamps')
 const coursesRouter = require('./routes/courses')
-
+const authRouter = require('./routes/auth')
 
 //DB connection
 connectDB();
@@ -42,6 +42,7 @@ app.use(express.static(path.join(__dirname, 'public')))
 //mount routers
 app.use('/api/v1/bootcamps', bootcampsRouter);
 app.use('/api/v1/courses', coursesRouter);
+app.use('/api/v1/auth', authRouter);
 
 
 //middleware
