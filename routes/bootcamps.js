@@ -1,5 +1,5 @@
 const express = require('express')
-const { responseLog } = require('../middleware/responseLog')
+
 
 const { 
     getBootcamps
@@ -34,7 +34,7 @@ router.route('/:id/photo').put(photoUploadBootcamp)
 
 router.route('/')
 .get(advancedResults(Bootcamp, 'courses'), getBootcamps)
-.post(responseLog, createBootcamp, responseLog);
+.post(createBootcamp);
 
 
 router.route('/:id')
