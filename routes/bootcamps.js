@@ -1,4 +1,5 @@
 const express = require('express')
+const { responseLog } = require('../middleware/responseLog')
 
 const { 
     getBootcamps
@@ -14,7 +15,7 @@ const {
 const Bootcamp = require('../models/Bootcamp')
 
 const advancedResults = require('../middleware/advancedResults')
-
+const { protect } = require('../middleware/auth')
 
 //include other route sources
 const courseRouter = require('./courses')
@@ -33,14 +34,14 @@ router.route('/:id/photo').put(photoUploadBootcamp)
 
 router.route('/')
 .get(advancedResults(Bootcamp, 'courses'), getBootcamps)
-.post(createBootcamp);
+.post(responseLog, createBootcamp, responseLog);
 
 
 router.route('/:id')
 .get(getBootcamp)
-.delete(deleteBootcamp)
-.put(putBootcamp)
-.patch(patchBootcamp);
+.delete(protect, deleteBootcamp)
+.put(protect, putBootcamp)
+.patch(protect, patchBootcamp);
 
 
 

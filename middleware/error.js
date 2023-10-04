@@ -4,7 +4,7 @@ const errorHandler = (err, req, res, next) => {
 
     error.message = err.message
     //log to console for developer
-    console.log(err)
+    console.log('Error: '.bgRed, err)
 
 
 

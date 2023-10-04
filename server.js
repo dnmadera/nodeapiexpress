@@ -7,6 +7,9 @@ const errorHandler = require('./middleware/error')
 const connectDB = require('./config/db')
 const fileUpload = require('express-fileupload')
 const cookieParser = require('cookie-parser')
+
+
+
 //loads env vars
 dotenv.config({ path: './config/config.env'});
 
@@ -51,6 +54,7 @@ app.use('/api/v1/auth', authRouter);
 
 //middleware
 app.use(errorHandler);
+
 
 
 const PORT = process.env.PORT || 5000
