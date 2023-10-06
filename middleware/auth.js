@@ -40,3 +40,16 @@ exports.protect = asyncHandler(async (req, res, next) => {
     }
 }
 )
+
+
+//Grant access to especific roles
+exports.authorize = (...roles) => {
+    return (req, resp, next) => {
+        if (!roles.includes(req.user.role)){
+            return next(new ErrorResponse(`User role ${req.user.role} is not authorize access to this route`, 403));
+        }
+
+        next();
+    }
+
+}
