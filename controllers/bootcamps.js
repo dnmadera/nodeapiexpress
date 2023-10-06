@@ -75,6 +75,12 @@ exports.deleteBootcamp = asyncHandler(async (req, res, next) => {
         return next(new ErrorResponse(`Bootcamp not found with id of ${req.params.id}`), 404)
     }
 
+    //Make sure user is bootcamp owner or admin 
+    if (bootcamp.user.id.toString() !== req.params.id && req.user.role != 'admin'){
+        return next(new ErrorResponse(`User ${req.params.id} is not authorized to delete this bootcamp`), 401)
+    }
+
+
     await bc.deleteOne()
 
     res.status(200).json({success: true, message: `deletes bootcamps id ${req.params.id}`});
@@ -106,17 +112,25 @@ exports.patchBootcamp = asyncHandler(async (req, res, next) => {
 
 
 const updateBootcamp = async (req, res, next) => {
-    const bc = await Bootcamp.findById(req.params.id);
-
     
-    if (!bc){
+    let bootcamp = await Bootcamp.findById(req.params.id);
+
+    if (!bootcamp){
         return next(new ErrorResponse(`Bootcamp not found with id of ${req.params.id}`), 404)
     }
 
-    const bootcamp = await Bootcamp.findByIdAndUpdate(req.params.id, req.body, {
+    //Make sure user is bootcamp owner or admin 
+    if (bootcamp.user.id.toString() !== req.params.id && req.user.role != 'admin'){
+        return next(new ErrorResponse(`User ${req.params.id} is not authorized to update this bootcamp`), 401)
+    }
+
+
+    bootcamp = await Bootcamp.findByIdAndUpdate(req.params.id, req.body, {
         new: true, //returns a new version
         runValidators: true
     });
+
+
     res.status(200).json({success: true, data: bootcamp});
 }
 
@@ -180,6 +194,12 @@ exports.photoUploadBootcamp = asyncHandler(async (req, res, next) => {
     if (!bc){
         return next(new ErrorResponse(`Bootcamp not found with id of ${req.params.id}`), 404)
     }
+
+    //Make sure user is bootcamp owner or admin 
+    if (bootcamp.user.id.toString() !== req.params.id && req.user.role != 'admin'){
+        return next(new ErrorResponse(`User ${req.params.id} is not authorized to update this bootcamp`), 401)
+    }
+
 
     if (!req.files){
         return next(new ErrorResponse(`Please upload a file`), 400)
