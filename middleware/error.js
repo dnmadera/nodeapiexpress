@@ -30,7 +30,7 @@ const errorHandler = (err, req, res, next) => {
  
 
     //writes the error message and status
-    res.status(error.statusCode || 500).json({
+    res.status(err.statusCode || 500).json({
         success: false,
         message: error.message || 'Server internal error'
     })
