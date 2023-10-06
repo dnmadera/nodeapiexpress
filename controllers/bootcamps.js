@@ -88,8 +88,7 @@ exports.deleteBootcamp = asyncHandler(async (req, res, next) => {
 */
 exports.putBootcamp = asyncHandler(async (req, res, next) => {   
   
-        const bootcamp = await Bootcamp.updateOne({_id: req.params.id}, req.body)
-        res.status(200).json({success: true, data: bootcamp});
+    await updateBootcamp(req, res, next);
 
 });
 
@@ -101,10 +100,25 @@ exports.putBootcamp = asyncHandler(async (req, res, next) => {
 */
 exports.patchBootcamp = asyncHandler(async (req, res, next) => {
 
-        const bootcamp = await Bootcamp.updateOne({_id: req.params.id}, req.body)
-        res.status(200).json({success: true, data: bootcamp});
+    await updateBootcamp(req, res, next);
 
 });
+
+
+const updateBootcamp = async (req, res, next) => {
+    const bc = await Bootcamp.findById(req.params.id);
+
+    
+    if (!bc){
+        return next(new ErrorResponse(`Bootcamp not found with id of ${req.params.id}`), 404)
+    }
+
+    const bootcamp = await Bootcamp.findByIdAndUpdate(req.params.id, req.body, {
+        new: true, //returns a new version
+        runValidators: true
+    });
+    res.status(200).json({success: true, data: bootcamp});
+}
 
 
 
