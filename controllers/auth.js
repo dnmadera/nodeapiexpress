@@ -170,13 +170,10 @@ exports.resetpassword = asyncHandler(async (req, res, next) => {
     .update(req.params.resettoken)
     .digest('hex');
 
-    const date = new Date();
-    console.log("date".red, date.getHours(),':', date.getMinutes(), 'token',resetPasswordToken )
-
 
     const user = await User.findOne({
         resetPasswordToken
-        ,resetPasswordExpiration: { $gt: date.getTime()}
+        ,resetPasswordExpiration: { $gt: Date.now()}
     });
 
     if (!user){
