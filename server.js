@@ -20,6 +20,7 @@ const coursesRouter = require('./routes/courses')
 const authRouter = require('./routes/auth')
 const sandboxRouter = require('./routes/sandbox')
 const usersRouter = require('./routes/users')
+const reviewsRouter = require('./routes/reviews')
 
 //DB connection
 connectDB();
@@ -54,6 +55,7 @@ app.use('/api/v1/courses', coursesRouter);
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/sandbox', sandboxRouter);
 app.use('/api/v1/users', usersRouter);
+app.use('/api/v1/reviews', reviewsRouter);
 
 
 
