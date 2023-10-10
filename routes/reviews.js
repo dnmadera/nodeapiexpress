@@ -3,7 +3,8 @@ const advancedResults = require('../middleware/advancedResults')
 const Review = require('../models/Review')
 const { protect, authorize } = require('../middleware/auth')
 const { 
-    getReviews    
+    getReviews,
+    getReview
 } = require('../controllers/reviews');
 
 
@@ -15,6 +16,9 @@ router.route('/')
         path: "bootcamp",
         select: "name description"
     }), getReviews)    
+    
+router.route('/:id')
+    .get(getReview)
     
 
 module.exports = router
