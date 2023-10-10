@@ -12,7 +12,7 @@ const asyncHandler = require('../middleware/async');
  * @access  Public 
 */
 exports.getCourses = asyncHandler(async (req, res, next) => {
-    console.log('params', req.params.bootcamp_id)
+    //console.log('params', req.params.bootcamp_id)
     if (req.params.bootcamp_id){
             const query = await Course.find({ bootcamp: req.params.bootcamp_id });
             res.status(200).json({

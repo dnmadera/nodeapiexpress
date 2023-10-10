@@ -1,5 +1,5 @@
 const  advancedResults = (model, populate) => async (req, res, next) => {
-    console.log('params'.red, req.params)
+    //console.log('params'.red, req.params)
     let query;
 
     //Copy query

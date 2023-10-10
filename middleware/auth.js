@@ -8,8 +8,7 @@ const sendEmail = require('../utils/sendEmail')
 exports.protect = asyncHandler(async (req, res, next) => {
     let token;
 
-    try {
-        console.log('headers'.cyan, req.headers)
+    try {        
         if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')){
             token = req.headers.authorization.split(' ')[1]
         } 

@@ -19,6 +19,7 @@ const bootcampsRouter = require('./routes/bootcamps')
 const coursesRouter = require('./routes/courses')
 const authRouter = require('./routes/auth')
 const sandboxRouter = require('./routes/sandbox')
+const usersRouter = require('./routes/users')
 
 //DB connection
 connectDB();
@@ -52,6 +53,8 @@ app.use('/api/v1/bootcamps', bootcampsRouter);
 app.use('/api/v1/courses', coursesRouter);
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/sandbox', sandboxRouter);
+app.use('/api/v1/users', usersRouter);
+
 
 
 //middleware
