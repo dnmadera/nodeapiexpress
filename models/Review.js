@@ -40,7 +40,7 @@ const ReviewSchema = new mongoose.Schema({
 ReviewSchema.index({ bootcamp: 1, user:1 }, { unique: true })
 
 
-//static method to get avg cost of course tuition
+//static method to get avg rating of bootcamp reviews
 ReviewSchema.statics.getAverageRating = async function(bootcampId) {
     const result = await this.aggregate([{
         $match: { bootcamp: bootcampId}
@@ -58,7 +58,8 @@ ReviewSchema.statics.getAverageRating = async function(bootcampId) {
 
         let averageRating = result?.[0]?.averageRating ?? 0;        
         const modelBootcamp = this.model('Bootcamp')
-        await modelBootcamp.findByIdAndUpdate(bootcampId ,{
+        
+        modelBootcamp.findByIdAndUpdate(bootcampId ,{
             averageRating: averageRating
         })
     } catch (error) {
@@ -68,18 +69,39 @@ ReviewSchema.statics.getAverageRating = async function(bootcampId) {
 
 }
 
-// Call getAverageRating after save
-ReviewSchema.post('save', function() {
-    this.constructor.getAverageRating(this.bootcamp)
-  });
-
 
 //
 ReviewSchema.pre('deleteOne', { document: true }, function() {    
     this.constructor.getAverageRating(this.bootcamp)
-  })
+})
 
 
+
+  ReviewSchema.post('validate', function(result) {
+    console.log('%s has been validated (but not saved yet)'.yellow, result._id);
+  });
+  
+  ReviewSchema.post('deleteOne', function(result) {
+    console.log('%s has been deleted', result._id);
+  });
+
+
+
+  // Call getAverageRating after save
+ReviewSchema.post('findOneAndUpdate', async function(result) {    
+    //this.constructor.getAverageRating(result.bootcamp) 
+    //this line throws this.constructor.getAverageRating(result.bootcamp) but it works ok in .post('save')
+
+    console.log('%s has been updated'.green, result._id);
+    const Review = mongoose.model('Review');
+    await Review.getAverageRating(result.bootcamp);
+});
+
+
+ReviewSchema.post('save', function(result) {
+    console.log('%s has been saved'.green, result._id);
+    this.constructor.getAverageRating(result.bootcamp)
+  });
 
 
 module.exports = mongoose.model('Review', ReviewSchema);
