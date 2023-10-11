@@ -30,7 +30,7 @@ exports.getReviews = asyncHandler(async (req, res, next) => {
 
 
 /**
- * @desc    Gets all the reviews
+ * @desc    Get a review by id
  * @route   GET /api/v1/reviews/:id
  * @access  Public 
 */
@@ -47,6 +47,35 @@ exports.getReview = asyncHandler(async (req, res, next) => {
     
     
     res.status(200).json({
+        success: true,        
+        data: review
+    });
+    
+});
+
+
+
+/**
+ * @desc    Add a new review for bootcamp
+ * @route   POST /api/v1/bootcamps/:bootcamp_id/reviews
+ * @access  Private 
+*/
+exports.addReview = asyncHandler(async (req, res, next) => {    
+
+    req.body.bootcamp = req.params.bootcamp_id;
+    req.body.user = req.user.id;
+
+
+    const bootcamp = await Bootcamp.findById(req.body.bootcamp);
+
+    if (!bootcamp) {
+        next(new ErrorResponse(`No bootcamp was found with the id of ${req.body.bootcamp}`, 404))
+    }
+
+    const review = await Review.create(req.body);
+
+    
+    res.status(201).json({
         success: true,        
         data: review
     });

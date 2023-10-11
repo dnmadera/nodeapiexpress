@@ -4,7 +4,8 @@ const Review = require('../models/Review')
 const { protect, authorize } = require('../middleware/auth')
 const { 
     getReviews,
-    getReview
+    getReview,
+    addReview
 } = require('../controllers/reviews');
 
 
@@ -15,7 +16,8 @@ router.route('/')
     .get(advancedResults(Review, {
         path: "bootcamp",
         select: "name description"
-    }), getReviews)    
+    }), getReviews)
+    .post(protect, authorize('user', 'admin'), addReview)    
     
 router.route('/:id')
     .get(getReview)
