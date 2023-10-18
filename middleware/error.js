@@ -10,7 +10,7 @@ const errorHandler = (err, req, res, next) => {
 
     //Mongo cast error, resource not found
     if (err.name === 'CastError'){
-        const message = `Resource not found id value ${err.value}`
+        const message = `Resource not found`
         error = new ErrorResponse(message, 404);
     }
 

@@ -7,6 +7,7 @@ const errorHandler = require('./middleware/error')
 const connectDB = require('./config/db')
 const fileUpload = require('express-fileupload')
 const cookieParser = require('cookie-parser')
+const mongoSanitize = require('express-mongo-sanitize')
 
 
 
@@ -48,6 +49,9 @@ app.use(fileUpload())
 
 app.use(express.static(path.join(__dirname, 'public')))
 
+//Sanitize data
+app.use(mongoSanitize());
+
 
 //mount routers
 app.use('/api/v1/bootcamps', bootcampsRouter);
@@ -56,6 +60,9 @@ app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/sandbox', sandboxRouter);
 app.use('/api/v1/users', usersRouter);
 app.use('/api/v1/reviews', reviewsRouter);
+
+
+
 
 
 
