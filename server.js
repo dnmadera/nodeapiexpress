@@ -10,7 +10,9 @@ const cookieParser = require('cookie-parser')
 const mongoSanitize = require('express-mongo-sanitize')
 const helmet = require('helmet')
 const xss = require('xss-clean')
-
+const rateLimit = require('express-rate-limit')
+const hpp = require('hpp')
+const cors = require('cors')
 
 //loads env vars
 dotenv.config({ path: './config/config.env'});
@@ -58,6 +60,20 @@ app.use(helmet())
 
 // Prevent XSS attacks
 app.use(xss())
+
+// Rate limiting
+const limiter = rateLimit({
+    windowsMs: 10*60*1000,
+    max: 100
+})
+
+app.use(limiter) 
+
+// Prevent HTTP parameter pollution
+app.use(hpp())
+
+// Enable CORS
+app.use(cors())
 
 //mount routers
 app.use('/api/v1/bootcamps', bootcampsRouter);
