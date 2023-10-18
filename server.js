@@ -8,7 +8,8 @@ const connectDB = require('./config/db')
 const fileUpload = require('express-fileupload')
 const cookieParser = require('cookie-parser')
 const mongoSanitize = require('express-mongo-sanitize')
-
+const helmet = require('helmet')
+const xss = require('xss-clean')
 
 
 //loads env vars
@@ -52,6 +53,11 @@ app.use(express.static(path.join(__dirname, 'public')))
 //Sanitize data
 app.use(mongoSanitize());
 
+//Set security headers
+app.use(helmet())
+
+// Prevent XSS attacks
+app.use(xss())
 
 //mount routers
 app.use('/api/v1/bootcamps', bootcampsRouter);
