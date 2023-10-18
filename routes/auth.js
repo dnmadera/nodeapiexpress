@@ -7,7 +7,8 @@ const {
     forgotPassword,
     resetpassword,
     updateUserDetails,
-    updatePassword
+    updatePassword,
+    logout
 } = require('../controllers/auth')
 
 const { protect } = require('../middleware/auth')
@@ -24,7 +25,9 @@ router
     .get('/me', protect, getMe)
     .post('/forgotpassword', forgotPassword)
     .put('/updatedetails', protect,  updateUserDetails)
-    .put('/updatepassword', protect,  updatePassword);
+    .put('/updatepassword', protect,  updatePassword)
+    .get('/logout', protect, logout)
+    
 
 
 

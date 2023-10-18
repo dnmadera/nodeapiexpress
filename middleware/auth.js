@@ -8,20 +8,14 @@ const sendEmail = require('../utils/sendEmail')
 exports.protect = asyncHandler(async (req, res, next) => {
     let token;
 
-    try {        
-        if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')){
-            token = req.headers.authorization.split(' ')[1]
-        } 
-    } catch (err){
-        console.error(err)
-        return new ErrorResponse('You are not authorize', 401)
+    
+    if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')){
+        token = req.headers.authorization.split(' ')[1]
+    } else if (req.cookies.token) {
+        console.log('cookies'.red, req.cookies)
+        token = req.cookies.token
     }
     
-    /**
-        else if (req.cookies.token) {
-            token = req.cokies.token
-        }
-    */
 
     if (!token){
         
