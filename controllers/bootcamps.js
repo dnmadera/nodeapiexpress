@@ -65,19 +65,16 @@ exports.createBootcamp = asyncHandler (async (req, res, next) => {
  * @param   {string} req.params.id - the resource id
  * @returns {string} the message of the result of the operation 
 */
-exports.deleteBootcamp = asyncHandler(async (req, res, next) => {
-    console.log('id', req.params.id)
+exports.deleteBootcamp = asyncHandler(async (req, res, next) => {    
     const bc = await Bootcamp.findById(req.params.id);
-
-    console.log('bootcamp', bc)
 
     if (!bc){
         return next(new ErrorResponse(`Bootcamp not found with id of ${req.params.id}`), 404)
     }
 
     //Make sure user is bootcamp owner or admin 
-    if (bootcamp.user.id.toString() !== req.params.id && req.user.role != 'admin'){
-        return next(new ErrorResponse(`User ${req.params.id} is not authorized to delete this bootcamp`), 401)
+    if (bc.user.toString() !== req.user.id && req.user.role != 'admin'){
+        return next(new ErrorResponse(`User ${bc.user.toString()} is not authorized to delete this bootcamp`), 401)
     }
 
 
