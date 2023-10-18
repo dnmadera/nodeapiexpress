@@ -4,19 +4,43 @@ const ErrorResponse = require('../utils/errorResponse')
 const asyncHandler = require('../middleware/async')
 const geocoder = require('../utils/geocoder');
 
+
 /**
- * @desc    Gets all the bootcamps
- * @access  Public 
-*/
+ * @swagger
+ * /api/v1/bootcamps: 
+ *   get:
+ *     summary: Gets all the bootcamps
+ *     description: Gets all the bootcamps
+ *     responses:
+ *       200:
+ *         description: OK
+ *       404:
+ *         description: Not found
+ */
 exports.getBootcamps = asyncHandler(async (req, res, next) => {
     res.status(200).json(res.advancedResults);
 });
 
 
 /**
- * @desc    Gets single bootcamps
- * @access  Public 
-*/
+ * @swagger
+ * /api/v1/bootcamps/{id}: 
+ *   get:
+ *     summary: Get the bootcamp
+ *     description: Get the bootcamp (:id is the expected id). Checks if the user is authorized
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: Bootcamp ID
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: the bootcamp
+ *       404:
+ *         description: Not found
+ */
 exports.getBootcamp = asyncHandler(async (req, res, next) => {
 
     const bootcamp = await Bootcamp.findById(req.params.id)

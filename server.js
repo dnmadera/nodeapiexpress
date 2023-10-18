@@ -32,6 +32,14 @@ connectDB();
 const app = express();
 
 
+//SWAGGER
+const swaggerUi = require('swagger-ui-express');
+const swaggerSpec = require('./config/swagger'); // Importa el archivo de configuración de Swagger
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
+
+
 
 //body parser
 app.use(express.json())

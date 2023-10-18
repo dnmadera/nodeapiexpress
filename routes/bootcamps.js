@@ -36,6 +36,7 @@ router.route('/')
 .post(protect, authorize('admin', 'publisher'), createBootcamp);
 
 
+
 router.route('/:id')
 .get(getBootcamp)
 .delete(protect, authorize('admin', 'publisher'), deleteBootcamp)
