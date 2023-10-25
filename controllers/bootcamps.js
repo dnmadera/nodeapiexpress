@@ -217,7 +217,7 @@ exports.photoUploadBootcamp = asyncHandler(async (req, res, next) => {
     }
 
     //Make sure user is bootcamp owner or admin 
-    if (bootcamp.user.id.toString() !== req.params.id && req.user.role != 'admin'){
+    if (bc.user.id.toString() !== req.params.id && req.user.role != 'admin'){
         return next(new ErrorResponse(`User ${req.params.id} is not authorized to update this bootcamp`), 401)
     }
 

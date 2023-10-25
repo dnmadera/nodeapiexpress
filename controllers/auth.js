@@ -32,6 +32,7 @@ exports.register = asyncHandler(async (req, res, next) => {
  * @route   POST /api/v1/auth/login
 */
 exports.login = asyncHandler(async (req, res, next) => {
+    console.log('request'.red, req)
 
     const { email, password } = req.body;
 
@@ -81,7 +82,7 @@ const sendTokenResponse = (user, statusCode, res) => {
         .status(statusCode)
         .cookie('token', token, options)
         .json({
-            sucess: true,
+            success: true,
             token
         })
 }
@@ -229,6 +230,7 @@ exports.updateUserDetails = asyncHandler(async (req, res, next) => {
  * @route   PUT /api/v1/auth/updatepassword
 */
 exports.updatePassword = asyncHandler(async (req, res, next) => {
+    console.log('request'.red, req)
   
     const user = await User.findById(req.user.id).select('+password')
 
